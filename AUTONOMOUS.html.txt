@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Autonomous Vehicle And Robotics</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      background: white;
+      padding: 20px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .status {
+      margin-top: 20px;
+      padding: 10px;
+      background: #e9e9e9;
+      border-radius: 5px;
+    }
+    button {
+      margin: 5px;
+      padding: 10px 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    select {
+      margin: 5px;
+      padding: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Autonomous Vehicle And Robotics</h2>
+
+    <label for="vehicleType">Select Vehicle:</label>
+    <select id="vehicleType">
+      <option value="Car">Car</option>
+      <option value="Truck">Truck</option>
+      <option value="Robot">Robot</option>
+    </select>
+
+    <div>
+      <button onclick="startVehicle()">Start</button>
+      <button onclick="stopVehicle()">Stop</button>
+      <button onclick="increaseSpeed()">Speed +</button>
+      <button onclick="decreaseSpeed()">Speed -</button>
+    </div>
+
+    <div class="status">
+      <p><strong>Vehicle:</strong> <span id="vehicleName">Car</span></p>
+      <p><strong>Fuel Type:</strong> <span id="fuelType">Petrol</span></p>
+      <p><strong>Speed:</strong> <span id="speed">0</span> km/h</p>
+      <p><strong>Distance:</strong> <span id="distance">0</span> km</p>
+    </div>
+  </div>
+
+  <script>
+    const vehicleData = {
+      Car: { fuel: 'Petrol' },
+      Truck: { fuel: 'Diesel' },
+      Robot: { fuel: 'Electric' },
+    };
+
+    let speed = 0;
+    let distance = 0;
+    let running = false;
+    let interval;
+
+    document.getElementById('vehicleType').addEventListener('change', () => {
+      const type = document.getElementById('vehicleType').value;
+      document.getElementById('vehicleName').textContent = type;
+      document.getElementById('fuelType').textContent = vehicleData[type].fuel;
+      resetSimulation();
+    });
+
+    function updateDisplay() {
+      document.getElementById('speed').textContent = speed;
+      document.getElementById('distance').textContent = distance.toFixed(1);
+    }
+
+    function startVehicle() {
+      if (!running) {
+        running = true;
+        interval = setInterval(() => {
+          distance += speed / 60; // 1 update per second
+          updateDisplay();
+        }, 1000);
+      }
+    }
+
+    function stopVehicle() {
+      running = false;
+      clearInterval(interval);
+    }
+
+    function increaseSpeed() {
+      if (speed < 200) {
+        speed += 10;
+        updateDisplay();
+      }
+    }
+
+    function decreaseSpeed() {
+      if (speed > 0) {
+        speed -= 10;
+        updateDisplay();
+      }
+    }
+
+    function resetSimulation() {
+      stopVehicle();
+      speed = 0;
+      distance = 0;
+      updateDisplay();
+    }
+
+    // Initialize display
+    updateDisplay();
+  </script>
+</body>
+</html>
